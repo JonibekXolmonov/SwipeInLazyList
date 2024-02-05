@@ -68,10 +68,11 @@ class MainActivity : ComponentActivity() {
                     }
                     val onDelete: (String) -> Unit = { book ->
                         books -= book
+                        Toast.makeText(context, "$book is deleted!", Toast.LENGTH_SHORT).show()
                     }
 
                     val onSave: (String) -> Unit = { book ->
-                        Toast.makeText(context, "$book is  saved!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "$book is saved!", Toast.LENGTH_SHORT).show()
                     }
 
                     BooksList(
@@ -134,7 +135,7 @@ fun <T> SwipeDeleteContainer(
     var isRemoved by remember {
         mutableStateOf(false)
     }
-    val isSave by remember {
+    var isSave by remember {
         mutableStateOf(false)
     }
 
@@ -147,7 +148,7 @@ fun <T> SwipeDeleteContainer(
                 }
 
                 DismissValue.DismissedToEnd -> {
-//                    isSave = !isSave
+                    isSave = true
                     false
                 }
 
@@ -225,13 +226,9 @@ fun DeleteBackground(
             modifier = Modifier.align(
                 Alignment.CenterStart
             ),
-            tint = Color.White
+            tint = if (swipeDismissState.dismissDirection == DismissDirection.EndToStart)
+                Color.Red
+            else Color.White
         )
     }
 }
-
-data class Book(
-    val id: UUID = UUID.randomUUID(),
-    val name: String,
-    val isSaved: Boolean = false
-)
